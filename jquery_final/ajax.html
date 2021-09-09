@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    <title>도서검색</title>
+</head>
+
+<body>
+    <h1>도서 검색</h1>
+    <input id="bookName" value="" type="text">
+    <button id="search">검색</button>
+
+    <p id="aaa"></p>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"
+    
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+            $("#search").click(function () {
+                $.ajax({
+                    method: "GET",
+                    url: "https://dapi.kakao.com/v3/search/book?target=title",
+                    data: { query: $("#bookName").val() },
+                    headers: { Authorization: "KakaoAK aa3d0dae172d1ca150be150cdb004460" }
+                })
+                    .done(function (msg) {
+                        $("p").empty();
+                        $.each(msg.documents, function() {
+                            $("p").append("<strong>" + this.title + "</strong>");
+                            $("p").append("<img src='" + this.thumbnail + "'/><br>");
+                            $("p").append("<strong> 가격 : " + this.price + "</strong><br>");
+                            $("p").append("<strong> 세일가격 : " + this.sale_price + "</strong><br>");
+                            $("p").append("<strong> 출판사 : " + this.publisher + "</strong><br>");
+                            $("p").append("<strong> 저자 : " + this.authors + "</strong><br>");
+                            $("p").append("<strong> 판매 : " + this.status + "</strong><br>");
+                            $("p").append("<a href='" + this.url + "' target='_blank'>" + this.url + "</a><br>");
+                            $("#bookName").empty();
+                        });                     
+                    });
+            });
+        });
+    </script>
+</body>
+</html>
